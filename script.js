@@ -49,18 +49,32 @@ welcomeScreen.appendChild(cursorGlow);
 
 let sparkleTimer = 0;
 
-welcomeScreen.addEventListener("mousemove", function(e){
+function handleMove(x, y){
     const rect = welcomeScreen.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+    const relX = x - rect.left;
+    const relY = y - rect.top;
 
-    cursorGlow.style.left = x + "px";
-    cursorGlow.style.top = y + "px";
+    cursorGlow.style.left = relX + "px";
+    cursorGlow.style.top = relY + "px";
 
     sparkleTimer++;
     if(sparkleTimer % 6 === 0){
-        createSparkle(x, y);
+        createSparkle(relX, relY);
     }
+}
+
+welcomeScreen.addEventListener("mousemove", function(e){
+    handleMove(e.clientX, e.clientY);
+});
+
+welcomeScreen.addEventListener("touchmove", function(e){
+    const touch = e.touches[0];
+    handleMove(touch.clientX, touch.clientY);
+});
+
+welcomeScreen.addEventListener("touchstart", function(e){
+    const touch = e.touches[0];
+    handleMove(touch.clientX, touch.clientY);
 });
 
 function createSparkle(x, y){
